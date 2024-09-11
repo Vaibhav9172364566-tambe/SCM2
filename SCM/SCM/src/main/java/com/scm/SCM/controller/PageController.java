@@ -16,7 +16,27 @@ public class PageController {
         model.addAttribute("a", "b");
         return "home";
 
+
+    
+
+
     }
 
+            //about route
+
+         @RequestMapping("/about")
+             public String aboutPage() {
+              System.out.println("about page handler");
+              return "about";
+    }
+
+            //services 
+
+
+    @RequestMapping("/services")
+    public String servicesPage() {
+        System.out.println("services page handler");
+        return "services";
+    }
 }
 
