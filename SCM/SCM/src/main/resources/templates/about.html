@@ -1,4 +1,5 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -13,6 +14,26 @@
         <section>This is dynamic page</section>
 
     </div>
+    
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en" th:replace= "~{base :: parent(~{::#content},~{::title},
+~{::script}) }">
+<head>
+   <title>About page</title>
+</head>
+<body>
+    <h1>Vaibhav about page</h1>
+    <div id="content">
+        <h1>This is welcome about page</h1>
+
+    </div>
+
+    <script>
+    console.log("about page");
+</script>
     
 </body>
 </html>
