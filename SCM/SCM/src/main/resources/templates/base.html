@@ -14,7 +14,9 @@
 </div> -->
 
 <!DOCTYPE html>
+
 <html 
+class="dark"
 lang="en"
 th:fragment="parent(content,title,script)"
  xmlns:th="http://www.thymeleaf.org">
@@ -26,11 +28,26 @@ th:fragment="parent(content,title,script)"
     <link href="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.css" rel="stylesheet" />
 
 </head>
-<body>
-    Base page Content
+<body class="dark:bg-gray-900 dark:text-white">
 
-    <section data-th-replace= "${content}"></section>
-    
+ <!--Common Header-->
+
+ <div data-th-replace="~{navbar::navbar}">
+
+ </div>
+
+<!--Main content-->
+    <div class="p-4">
+        <section data-th-replace= "${content}"></section>
+
+    </div>
+
+
+    <!--Comman footer-->
+
+    <footer class="p-4">Footer:Vaibhav Tambe</footer>
+
+
 
 <!--Flow bite js-->
     <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
