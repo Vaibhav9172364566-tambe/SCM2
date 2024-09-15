@@ -10,13 +10,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.scm.SCM.entities.User;
 import com.scm.SCM.forms.UserForm;
-import com.scm.SCM.services.UserService;
+import com.scm.SCM.helpers.Message;
+import com.scm.SCM.helpers.MessageType;
+import com.scm.SCM.services.UserServices;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class PageController {
 
     @Autowired
-    private UserService userService;
+    private UserServices userService;
 
     @RequestMapping("/home")
 
@@ -26,11 +30,6 @@ public class PageController {
         model.addAttribute("Youtube", "hb");
         model.addAttribute("a", "b");
         return "home";
-
-
-    
-
-
     }
 
             //about route
@@ -72,28 +71,48 @@ public class PageController {
     }
 
     //processing register
-    @RequestMapping(value = "do-register",method = RequestMethod.POST)
-    public String processRegister(@ModelAttribute UserForm userForm){
+    @RequestMapping(value = "/do-register",method = RequestMethod.POST)
+    public String processRegister(@ModelAttribute UserForm userForm ,HttpSession session){
+
+        
         System.out.println("Processinggggggggggg");
         System.out.println(userForm);
 
         //save to db
     
         //userForm to   -->>user
-        User user=User.builder()
-        .name(userForm.getName())
-        .email(userForm.getEmail())
-        .password(userForm.getPassword())
-        .about(userForm.getAbout())
-        .phoneNumber(userForm.getPhoneNumber())
-        .profilePic("/SCM/src/main/resources/static/images/user.png")
+        // User user=User.builder()
+        // .name(userForm.getName())
+        // .email(userForm.getEmail())
+        // .password(userForm.getPassword())
+        // .about(userForm.getAbout())
+        // .phoneNumber(userForm.getPhoneNumber())
+        // .profilePic("/SCM/src/main/resources/static/images/user.png")
+        // .build();
 
-        .build();
+        User user=new User();
+   
+         user.setName(userForm.getName());
+         user.setEmail(userForm.getEmail());
+         user.setPassword(userForm.getPassword());
+         user.setAbout(userForm.getAbout());
+         user.setPhoneNumber(userForm.getPhoneNumber());
+        //  user.setEnabled(true);
+         user.setProfilePic("/SCM/src/main/resources/static/images/user.png");
+
+
        User savedUser= userService.saveUser(user);
        System.out.println("saved user");
+
+       Message message= Message.builder().content("Registeration Succefull").type(MessageType.green).build();
+
+
+       session.setAttribute("message",message );
 
 
         return "redirect:/register";
     }
+
+    
 }
 

@@ -3,95 +3,103 @@ package com.scm.SCM.services.impl;
 import java.util.List;
 import java.util.Optional;
 
+import org.hibernate.validator.constraints.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.scm.SCM.entities.User;
-import com.scm.SCM.helper.ResourceNotFoundException;
+import com.scm.SCM.helpers.ResourceNotFoundException;
 import com.scm.SCM.repsitories.UserRepo;
-import com.scm.SCM.services.UserService;
+import com.scm.SCM.services.UserServices;
 
-public class UserServiceImpl implements UserService {
+@Service
+public class UserServiceImpl implements UserServices {
 
     @Autowired
     private UserRepo userRepo;
-
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
+    private Logger logger=LoggerFactory.getLogger(this.getClass());
+    
 
     @Override
     public User saveUser(User user) {
 
-        //id
+        //user id generated
         String userId=java.util.UUID.randomUUID().toString();
-
-        //password
-
-       // user.setPassword(userId);
-
         user.setUserId(userId);
         return userRepo.save(user);
+       
     }
 
     @Override
     public Optional<User> getUserById(String id) {
+       
         return userRepo.findById(id);
-
     }
 
     @Override
     public Optional<User> updateUser(User user) {
+       User user2= userRepo.findById(user.getUserId()).orElseThrow(()-> new ResourceNotFoundException("User not found"));
+       user2.setName(user.getName());
+       user2.setEmail(user.getEmail());
+       user2.setPassword(user.getPassword());
+       user2.setAbout(user.getAbout());
+       user2.setPhoneNumber(user.getPhoneNumber());
+       user2.setProfilePic(user.getProfilePic());
+       user2.setEnabled(user.isEnabled());
+       user2.setEmailVerified(user.isEmailVerified());
+       user2.setPhoneVerified(user.isPhoneVerified());
+       user2.setProvider(user.getProvider());
+       user2.setProviderUserId(user.getProviderUserId());
 
-      User user2=  userRepo.findById(user.getUserId()).orElseThrow(()->new ResourceNotFoundException("user not found"));
-
-      user2.setName(user.getName());
-      user2.setEmail(user.getEmail());
-      user2.setPassword(user.getPassword());
-      user2.setAbout(user.getAbout());
-      user2.setPhoneNumber(user.getPhoneNumber());
-      user2.setProfilePic(user.getProfilePic());
-      user2.setProfilePic(user.getProfilePic());
-      user2.setEnabled(user.isEnabled());
-      user2.setEmailVerified(user.isEmailVerified());
-      user2.setPhoneVerified(user.isPhoneVerified());
-      user2.setProvider(user.getProvider());
-      user2.setProviderUserId(user.getProviderUserId());
+       User save=userRepo.save(user2);
+       return Optional.ofNullable(save);
 
 
-      //save in the db
 
-      User save= userRepo.save(user2);
-      return Optional.ofNullable(save);
-       
+      
     }
 
     @Override
-    public void deleteUser(String id) {
-    User user = userRepo.findById(id)
-        .orElseThrow(() -> new ResourceNotFoundException("User not found with id: "));
-    userRepo.delete(user);
-}
+    public void deleteuser(String id) {
 
-    @Override
-    public boolean isUserExit(String userId) {
+        User user2= userRepo.findById(id).orElseThrow(()-> new ResourceNotFoundException("User not found"));
 
-        User user2=userRepo.findById(userId).orElse(null);
-        return user2 != null ?true :false;
-    
-    }
-
-    @Override
-    public boolean isUserExittByEmail(String email) {
-       User user= userRepo.findByEmail(email).orElse(null);
-       
-       return user != null ?true :false;
-
-    }
-
-    @Override
-    public List<User> getAllUser() {
+        userRepo.delete(user2);
         
+        
+    }
+
+    @Override
+    public boolean isUserExit(String UserId) {
+
+        User user2= userRepo.findById(UserId).orElse(null);
+
+        return user2 !=null ? true: false;
+    }
+
+    @Override
+    public boolean isUserExitByEmail(String email) {
+
+       User user= userRepo.findByEmail(email).orElse(null);
+        return user !=null ? true :false;
+
+
+        
+    }
+
+    @Override
+    public List<User> getAllUsers() {
+
         return userRepo.findAll();
+        
+    }
+
+    @Override
+    public User getUserByEmail(String email) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getUserByEmail'");
     }
 
 }
