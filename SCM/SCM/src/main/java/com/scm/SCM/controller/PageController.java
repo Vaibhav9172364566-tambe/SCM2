@@ -17,9 +17,21 @@ import com.scm.SCM.services.UserServices;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @Controller
 public class PageController {
+
+    @Autowired
+    private UserServices services;
+
+    @GetMapping("/")
+    public String index() {
+        return "/redirect/home";
+    }
+    
+
 
     @Autowired
     private UserServices userService;
