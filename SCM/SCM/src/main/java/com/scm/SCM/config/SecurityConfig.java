@@ -1,11 +1,14 @@
 package com.scm.SCM.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import com.scm.SCM.services.impl.SecurityCustomUserDetailsService;
 
 @Configuration
 public class SecurityConfig {
@@ -31,6 +34,27 @@ public class SecurityConfig {
     //     var inMemoryUserDetailsManager=new InMemoryUserDetailsManager(user1,user2);
     //     return inMemoryUserDetailsManager;
     // }
+
+    @Autowired
+    private SecurityCustomUserDetailsService userDetailsService;
+
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider(){
+        DaoAuthenticationProvider daoAuthenticationProvider=new DaoAuthenticationProvider();
+
+        //user service ka object
+
+        daoAuthenticationProvider.setUserDetailsService(userDetailsService);
+        //password encoder ka object
+        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
+        return daoAuthenticationProvider;
+
+    }
+
+    public PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
+
+    }
 
 
 }

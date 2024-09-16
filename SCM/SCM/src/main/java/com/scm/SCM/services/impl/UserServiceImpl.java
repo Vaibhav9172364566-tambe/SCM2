@@ -7,9 +7,11 @@ import org.hibernate.validator.constraints.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.scm.SCM.entities.User;
+import com.scm.SCM.helpers.AppConstant;
 import com.scm.SCM.helpers.ResourceNotFoundException;
 import com.scm.SCM.repsitories.UserRepo;
 import com.scm.SCM.services.UserServices;
@@ -17,6 +19,8 @@ import com.scm.SCM.services.UserServices;
 @Service
 public class UserServiceImpl implements UserServices {
 
+
+    private PasswordEncoder passwordEncoder;
     @Autowired
     private UserRepo userRepo;
     private Logger logger=LoggerFactory.getLogger(this.getClass());
@@ -28,6 +32,13 @@ public class UserServiceImpl implements UserServices {
         //user id generated
         String userId=java.util.UUID.randomUUID().toString();
         user.setUserId(userId);
+
+user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+
+//set user role
+user.setRoleList(List.of(AppConstant.ROLE_USER));
+        logger.info(user.getProvider().toString());
         return userRepo.save(user);
        
     }
