@@ -17,7 +17,6 @@ import com.scm.SCM.services.UserServices;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 @Controller
@@ -75,6 +74,7 @@ public class PageController {
     public String login() {
         return new String("login");
     }
+
 
     
     @GetMapping("/register")

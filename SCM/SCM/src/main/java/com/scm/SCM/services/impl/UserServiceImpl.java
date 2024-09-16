@@ -19,6 +19,7 @@ import com.scm.SCM.services.UserServices;
 public class UserServiceImpl implements UserServices {
 
 
+    @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
     private UserRepo userRepo;
@@ -31,6 +32,9 @@ public class UserServiceImpl implements UserServices {
         //user id generated
         String userId=java.util.UUID.randomUUID().toString();
         user.setUserId(userId);
+
+        // String encodedPassword = passwordEncoder.encode(user.getPassword());
+        // user.setPassword(encodedPassword);
 
 user.setPassword(passwordEncoder.encode(user.getPassword()));
 
